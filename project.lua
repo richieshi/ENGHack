@@ -5,11 +5,17 @@ count = 0
 unlockedSince = 0 
 turn = false
 lastTime = 0
-previousTime = 0  
+previousTime = 0 
+appTitle = ""
  
 function onForegroundWindowChange(app, title)
 	myo.debug("Title: " .. title)
+	appTitle = title
 	return true
+end
+
+function activeAppName()
+	return appTitle
 end
 
 function onPoseEdge(pose, edge)
@@ -24,7 +30,7 @@ function onPoseEdge(pose, edge)
 		
 		if (not locked) then
 			if (pose == "waveIn" ) then
-					nextSong()
+					nextSong() 
 			elseif (pose == "waveOut") then
 					prevSong() 
 			elseif (pose == "fist") then
@@ -49,7 +55,7 @@ function toggleLock()
 		end
 	else
 		myo.vibrate("medium")
-		while not appTitle == "MiniPlayer" do
+		while not activeAppName == "MiniPlayer" do
 			count = count + 1
 			for i = 0, count, 1 do
 				myo.keyboard("tab", "press", "alt")
