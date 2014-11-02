@@ -54,15 +54,14 @@ function toggleLock()
 			count = count - 1
 		end
 		myo.keyboard("left_alt", "up")		
+		start = myo.getTimeMilliseconds()
+		while (myo.getTimeMilliseconds() - start < 250) do
+		end
 	else
 		myo.vibrate("medium")
 		doTab = true
 	end
 end
-
-function run() 
- 
- end
  
 function nextSong()
 	myo.keyboard("right_arrow", "press")
@@ -108,14 +107,13 @@ function onPeriodic()
 	if not (activeAppName() == "MiniPlayer")and doTab then
 			count = count + 1
 			myo.keyboard("left_alt", "down" )
-			for i = 0, count, 1 do
+			for i = 1, count, 1 do
 				myo.keyboard("tab", "press")
 			end
 			myo.keyboard("left_alt", "up")
 			start = myo.getTimeMilliseconds()
 			while (myo.getTimeMilliseconds() - start < 250) do
 			end
-			myo.debug(activeAppName())
 	else
 		doTab = false
 	end
