@@ -1,12 +1,14 @@
 scriptId = 'com.project'
 
 locked = true
+getOut = false
+inLoop = false
 count = 0
 unlockedSince = 0 
 turn = false
 lastTime = 0
 previousTime = 0 
-appTitle = ""
+appTitle = ''
  
 function onForegroundWindowChange(app, title)
 	myo.debug("Title: " .. title)
@@ -19,9 +21,6 @@ function activeAppName()
 end
 
 function onPoseEdge(pose, edge)
-
-	run = true
-	
 	pose = conditionallySwapWave(pose)
 	if(edge == "on") then
 		if (pose == "thumbToPinky") then
@@ -49,18 +48,15 @@ function toggleLock()
 	locked = not locked
 	if (locked) then
 		myo.vibrate("short")
-		while not count == 0 do
-			myo.keyboard("tab", "press", "alt")
+		myo.keyboard("left_alt", "down")
+		while not (count == 0) do
+			myo.keyboard("tab", "press")
 			count = count - 1
 		end
+		myo.keyboard("left_alt", "up")		
 	else
 		myo.vibrate("medium")
-		while not activeAppName == "MiniPlayer" do
-			count = count + 1
-			for i = 0, count, 1 do
-				myo.keyboard("tab", "press", "alt")
-			end
-		end
+		doTab = true
 	end
 end
 
@@ -108,6 +104,21 @@ function onPeriodic()
 			volumeDown() 
 		end
 	end
+	
+	if not (activeAppName() == "MiniPlayer")and doTab then
+			count = count + 1
+			myo.keyboard("left_alt", "down" )
+			for i = 0, count, 1 do
+				myo.keyboard("tab", "press")
+			end
+			myo.keyboard("left_alt", "up")
+			start = myo.getTimeMilliseconds()
+			while (myo.getTimeMilliseconds() - start < 250) do
+			end
+			myo.debug(activeAppName())
+	else
+		doTab = false
+	end
 end
 
 function conditionallySwapWave(pose)
@@ -119,4 +130,4 @@ function conditionallySwapWave(pose)
 		end
 	end
 	return pose
-end
+end																																																																																															
