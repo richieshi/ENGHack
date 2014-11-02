@@ -6,8 +6,7 @@ locked = false
 scroll = false
  
 function onForegroundWindowChange(app, title)
-	myo.debug("Title: " .. title)
-	return title
+	return true
 end
 
 function onFist()
@@ -21,7 +20,7 @@ function onFist()
 end
 
 function onWaveIn()
-	myo.mouse("center", "down")
+	myo.keyboard("down_arrow", "down")
 end
 
 function offWaveIn()
@@ -35,7 +34,7 @@ end
 function onPoseEdge(pose, edge)
 	if (pose == "waveIn" and edge == "on") then
 		onWaveIn()
-	else if(pose == "waveIn" and edge == "off")
+	elseif(pose == "waveIn" and edge == "off") then
 		offWaveIn()
 	end
 	

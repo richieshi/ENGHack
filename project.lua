@@ -1,46 +1,69 @@
 scriptId = 'com.project'
 
-mouseControl = false
-locked = false
-scroll = false
+locked = true
+unlockedSince = 0 
+turnn = false
  
 function onForegroundWindowChange(app, title)
 	myo.debug("Title: " .. title)
-	return title
-end
-
-function onFist()
-	if (mouseControl) then
-		myo.controlMouse(false)
-		mouseControl = false
-	else
-		myo.controlMouse(true)
-		mouseControl = true
-	end
-end
-
-function onWaveIn()
-	myo.mouse("center", "down")
-end
-
-function offWaveIn()
-	myo.keyboard("down_arrow", "up")
-end
-
-function onThumbToPinky()
-	
+	return true
 end
 
 function onPoseEdge(pose, edge)
-	if (pose == "waveIn") then
-		onWaveIn()
-	else
-		offWaveIn()
-	end
+
+	run = true
 	
-	if(pose == "fist" and edge == "on") then
-		onFist()
-	elseif (pose == "thumbToPinky" and edge == "on") then
-		onThumbToPinky()
+	if(edge == "on") then
+		if (pose == "thumbToPinky") then
+			toggleLock()
+		end
+		
+		if (not locked) then
+			if (pose == "waveIn") then
+				nextSong()
+			elseif (pose == "waveOut") then
+				prevSong()
+			elseif (pose == "fist") then
+				play()
+			elseif (pose == "fingersSpread") then
+				initYaw = myo.getYaw()
+				turn = true
+			end			
+		end
+	else
+		if (pose == "fingersSpread") then
+			turn = false
+		end
+	end
+end
+
+function toggleLock()
+	locked = not locked
+	if (locked) then
+		myo.vibrate("short")
+	else
+		myo.vibrate("medium")
+	end
+end
+
+function nextSong()
+	myo.keyboard("right_arrow", "press")
+end
+
+function prevSong()
+	myo.keyboard("left_arrow", "press")
+end
+
+function play()
+	myo.keyboard("space", "press")
+end
+
+function adjustVolume()
+	
+end
+
+function onPerodic()
+	if (turn) then
+		myo.debug(myo.getYaw - initYaw)
 	end
 end
