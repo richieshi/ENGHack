@@ -4,6 +4,7 @@ scriptId = 'com.project'
 mouseControl = false
 locked = false
 scroll = false
+UNLOCKED_TIMEOUT = 2200
  
 function onForegroundWindowChange(app, title)
 	myo.debug("Title: " .. title)
@@ -21,7 +22,7 @@ function onFist()
 end
 
 function onWaveIn()
-	myo.mouse("center", "down")
+	myo.keyboard("down_arrow", "down")
 end
 
 function offWaveIn()
@@ -33,11 +34,24 @@ function onThumbToPinky()
 end
 
 function onPoseEdge(pose, edge)
+
+
+	
 	if (pose == "waveIn" and edge == "on") then
-		onWaveIn()
+		scroll = true
 	else if(pose == "waveIn" and edge == "off")
-		offWaveIn()
+		scroll = false
 	end
+	
+	while (scroll == true) do
+		
+		now = myo.getTimeMilliseconds()
+		if (now - unlockedSince > UNLOCKED_TIMEOUT) then 
+			onWaveIn()
+			unlockedSince = myo.getTimeMilliseconds()
+		end
+	end
+	
 	
 	if(pose == "fist" and edge == "on") then
 		onFist()
