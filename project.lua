@@ -49,15 +49,15 @@ function toggleLock()
 	locked = not locked
 	if (locked) then
 		myo.vibrate("short")
-		while count != 0 do
+		while not count == 0 do
 			myo.keyboard("tab", "press", "alt")
-			count -= 1
+			count = count - 1
 		end
 	else
 		myo.vibrate("medium")
-		while appTitle != "MiniPlayer" do
-			count += 1
-			for i = 0, count, i+ do
+		while not appTitle == "MiniPlayer" do
+			count = count + 1
+			for i = 0, count, 1 do
 				myo.keyboard("tab", "press", "alt")
 			end
 		end
