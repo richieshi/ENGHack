@@ -1,6 +1,7 @@
 scriptId = 'com.project'
 
 locked = true
+count = 0
 unlockedSince = 0 
 turn = false
 lastTime = 0
@@ -44,36 +45,22 @@ function onPoseEdge(pose, edge)
 	end
 end
 
---[[function run(pose)
-	
-	if (previousGesture == pose) then
-		if (timeSet == false) then
-			previousGesture = pose
-			setTime()
-			timeSet = true
-			return false
-		elseif (timeSet == true) then
-			if (myo.getTimeMilliseconds() - previousTime > 500) then
-				return true
-			else
-				return false
-			end
-		end	
-	else 
-		timeSet = false
-	end
-end --]]
-
-function setTime()
-	previousTime = myo.getTimeMilliseconds
-end 
-
 function toggleLock()
 	locked = not locked
 	if (locked) then
 		myo.vibrate("short")
+		while count != 0 do
+			myo.keyboard("tab", "press", "alt")
+			count -= 1
+		end
 	else
 		myo.vibrate("medium")
+		while appTitle != "MiniPlayer" do
+			count += 1
+			for i = 0, count, i+ do
+				myo.keyboard("tab", "press", "alt")
+			end
+		end
 	end
 end
 
@@ -114,7 +101,6 @@ function volumeUp()
 end
 
 function onPeriodic()
-
 	if (turn) then		
 	 	if (myo.getRoll() - initRoll > 0.1) then 
 			volumeUp()
