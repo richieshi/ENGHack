@@ -19,13 +19,7 @@ function onPoseEdge(pose, edge)
 	pose = conditionallySwapWave(pose)
 	if(edge == "on") then
 		if (pose == "thumbToPinky") then
-			previousTime = myo.getTimeMilliseconds()
-			while (myo.getTimeMilliseconds() - previousTime < 3000) do 
-				if (pose == "fingersSpread" and edge == "on") then
-					toggleLock()
-				end
-			end
-			myo.debug("end")
+			toggleLock()
 		end
 		
 		if (not locked) then
